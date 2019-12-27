@@ -27,4 +27,5 @@ api.add_resource(validarArquivo, '/validar')
 
 
 if __name__ == '__main__':
-     app.run(threaded=True, port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(threaded=True, port=port)
