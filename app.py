@@ -9,6 +9,8 @@ api = Api(app)
 CORS(app)
 
 @app.route("/")
+def index():
+    return "<h1>APICheckPWC</h1>"
 
 class validarArquivo(Resource):
     def post(self):
