@@ -1,0 +1,37 @@
+{
+    "arquivos":["C:\\Kroton\\MirTeam\\PI09\\validar-mapas\\20191127\\s_CRG_TGT_CTR_OLMP_1001_51_ESTN_SRVC.XML",
+                "C:\\Kroton\\MirTeam\\PI09\\validar-mapas\\20191127\\s_CRG_TGT_CTR_OLMP_1001_24_DVLC_CRDT_ALNO.XML",
+                "C:\\Kroton\\MirTeam\\PI09\\validar-mapas\\20191127\\s_CRG_TGT_CTR_OLMP_1000_85_TOTL_DESC_ANLT.XML",
+                "C:\\Kroton\\MirTeam\\PI09\\validar-mapas\\20191127\\s_CRG_TGT_CTR_OLMP_1000_49_DVLC_CRDT_ALNO.XML",
+                "C:\\Kroton\\MirTeam\\PI09\\validar-mapas\\20191127\\s_CRG_TGT_CTR_FAMA_1001_51_ESTN_SRVC.XML",
+                "C:\\Kroton\\MirTeam\\PI09\\validar-mapas\\20191127\\s_CRG_TGT_CTR_FAMA_1001_24_DVLC_CRDT_ALNO.XML",
+                "C:\\Kroton\\MirTeam\\PI09\\validar-mapas\\20191127\\s_CRG_TGT_CTR_FAMA_1000_85_TOTL_DESC_ANLT.XML",
+                "C:\\Kroton\\MirTeam\\PI09\\validar-mapas\\20191127\\s_CRG_TGT_CTR_FAMA_1000_49_DVLC_CRDT_ALNO.XML"
+            ],
+    "exibe_msg_ok": "0",
+    "connections":["$DBConnectionODS_READ", "$DBConnectionODS", "$DBConnectionSTAGE_SAS_READ", "$DBConnectionSTAGE_SAS", "$PMSessionLogFile", "$DBConnectionBI", "$DBConnectionBI_READ"],
+    "operacoes_mapa":["EXT", "TRF", "DIM", "FAT"],
+    "operacoes_workflow":["EXT", "TRF", "DIM", "FAT", "GDC", "TOT"],
+    "sistemas_origem":["FAMA", "OLMP", "FIES", "CLBR", "UNPR", "PRTK"],
+    "nome_arquivo_param":["PARAMETER_EXTRAC.prm", "PARAMETER_LOADER.prm", "PARAMETER_TRANSF.prm"],
+    "transformations":[
+        {"tipo": "Source Qualifier", "nome": "sq_"}, 
+        {"tipo": "Expression", "nome": "exp_"},
+        {"tipo": "Custom Transformation", "nome": "ctf_"},
+        {"tipo": "Expression", "nome": "exp_"},
+        {"tipo": "Filter", "nome": "fil_"},
+        {"tipo": "Joiner", "nome": "jnr_"},
+        {"tipo": "Lookup Procedure", "nome": "lkp_"},
+        {"tipo": "Router", "nome": "rtr_"},
+        {"tipo": "Update Strategy", "nome": "upd_"}
+    ],
+    "objetos_workflow":[
+        {"tipo": "Start", "nome": "Start"},
+        {"tipo": "Assignment", "nome": "asn_"},
+        {"tipo": "Email", "nome": "eml_"},
+        {"tipo": "Command", "nome": "cmd_"},
+        {"tipo": "Event Wait", "nome": "evw_"},
+        {"tipo": "Event Raise", "nome": "evr_"},
+        {"tipo": "Timer", "nome": "tmr_"}
+    ]
+}
