@@ -10,7 +10,7 @@
             ],
     "exibe_msg_ok": "0",
     "connections":["$DBConnectionODS_READ", "$DBConnectionODS", "$DBConnectionSTAGE_SAS_READ", "$DBConnectionSTAGE_SAS", "$PMSessionLogFile", "$DBConnectionBI", "$DBConnectionBI_READ"],
-    "operacoes_mapa":["EXT", "TRF", "DIM", "FAT"],
+    "operacoes_mapa":["EXT", "TRF", "DIM", "FAT", "CRG", "UPD"],
     "operacoes_workflow":["EXT", "TRF", "DIM", "FAT", "GDC", "TOT"],
     "sistemas_origem":["FAMA", "OLMP", "FIES", "CLBR", "UNPR", "PRTK"],
     "nome_arquivo_param":["PARAMETER_EXTRAC.prm", "PARAMETER_LOADER.prm", "PARAMETER_TRANSF.prm"],
