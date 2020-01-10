@@ -18,6 +18,8 @@ def valida(arquivo):
     retJson.update({"Transformacoes":validaTransformations(arquivo.findAll('transformation'))})
     retJson.update({"Emails":validaTaskEmail(arquivo.findAll('task'))})
     retJson.update({"Objetos Workflow":validaObjWorkflows(arquivo.findAll('workflow'))})
+    retJson.update({"Itens validados":listaItensManual()})
+    
     return retJson
    
 
@@ -34,7 +36,8 @@ def validaNomeConexao(arquivo):
         if(retCheck != None):
             ret.append(retCheck)
     return ret
-        
+
+#7.4.1. Aumento do intervalo de commit         
 def validaAtributos(arquivo):
     ret=[]
     retCheck = None
@@ -42,7 +45,7 @@ def validaAtributos(arquivo):
         #7.4.1. Aumento do intervalo de commit 
         if(m['name']=="Commit Interval"):
             if(m['value']!= "10000"):
-                retCheck = Func.geraMensagem("Commit Interval diferente do padrão, verificar: {v}".format(v=m['value']), "nok")
+                retCheck = Func.geraMensagem("Commit Interval diferente do padrão (10000), verificar: {v}".format(v=m['value']), "nok")
                 if(retCheck != None):
                     ret.append(retCheck)
         
@@ -66,28 +69,30 @@ def validaTaskInstance(arquivo):
     ret=[]
     retCheck = None
     for m in arquivo:
-        if (m.get('fail_parent_if_instance_did_not_run') is not None):
-            if(m['fail_parent_if_instance_did_not_run'] !="YES"):
-                retCheck = Func.geraMensagem("Task {tname} fail_parent_if_instance_did_not_run é: {v}".format(v=m['fail_parent_if_instance_did_not_run'], tname = m['taskname']), "nok")
-                if(retCheck != None):
-                    ret.append(retCheck)
+        if (m['taskname'] != "Start"):
+            if (m.get('fail_parent_if_instance_did_not_run') is not None):
+                if(m['fail_parent_if_instance_did_not_run'] !="YES"):
+                    retCheck = Func.geraMensagem("Task {tname} fail_parent_if_instance_did_not_run é: {v}".format(v=m['fail_parent_if_instance_did_not_run'], tname = m['taskname']), "nok")
+                    if(retCheck != None):
+                        ret.append(retCheck)
+                else:
+                    retCheck = Func.geraMensagem("Task {tname} fail_parent_if_instance_did_not_run ok".format(tname = m['taskname']), "ok")
+                    if(retCheck != None):
+                        ret.append(retCheck)
             else:
-                retCheck = Func.geraMensagem("Task {tname} fail_parent_if_instance_did_not_run ok".format(tname = m['taskname']), "ok")
+                retCheck = Func.geraMensagem("Task {tname} não possui fail_parent_if_instance_did_not_run".format(tname = m['taskname']), "nok")
                 if(retCheck != None):
                     ret.append(retCheck)
-        else:
-            retCheck = Func.geraMensagem("Task {tname} não possui fail_parent_if_instance_did_not_run".format(tname = m['taskname']), "nok")
-            if(retCheck != None):
-                ret.append(retCheck)
     return ret
 
-#Item 4.1.4.2 Nomenclatura de Mapas
+#4.1.4.2 Nomenclatura de Mapas
 def validaNomeMapa(arquivo):
     ret=[]
     retCheck = None
     for m in arquivo:
         nm = m['name'].split("_")
         msg = ""
+        aux = ""
         if(m['name'].startswith('m_') or m['name'].startswith('QW_')):
             if any(nm[1] in s for s in Conf.ListaTag("operacoes_mapa")):
                 if(nm[1] == "EXT"):
@@ -95,11 +100,14 @@ def validaNomeMapa(arquivo):
                         msg = "ok"
                     else:
                         msg = "nok"
+                        aux = "EXT sem o nome do sistema de origem valido"
             else:
                 msg = "nok"
+                aux = "não corresponde a lista de operacoes validas"
         else:
             msg = "nok"
-        retCheck=Func.geraMensagem("Nome do mapa {map} está {oknok}".format(map = m['name'], oknok = msg), msg)
+            aux = "mapa nao inicia com m_"
+        retCheck=Func.geraMensagem("Nome do mapa {map} está {oknok} | {aux}".format(map = m['name'], oknok = msg, aux = aux), msg)
         if(retCheck != None):
                 ret.append(retCheck)
     return ret
@@ -111,17 +119,21 @@ def validaNomeWorkflow(arquivo):
     for m in arquivo:
         nm = m['name'].split("_")
         msg = ""
+        aux = ""
         if(m['name'].startswith('wf_') or m['name'].startswith('QW_')):
             if any(nm[1] in s for s in Conf.ListaTag("operacoes_workflow")):
                 if(len(m['name'])<31):
                     msg = "ok"
                 else:
                     msg = "nok"
+                    aux = "tamanho maior que 30 caracteres"
             else:
                 msg = "nok"
+                aux = "não corresponde a lista de operacoes validas"
         else:
             msg = "nok"
-        retCheck=Func.geraMensagem("Nome do workflow {map} está {oknok}".format(map = m['name'], oknok = msg), msg)
+            aux = "workflow não inicia com wf_ ou QW_"
+        retCheck=Func.geraMensagem("Nome do workflow {map} está {oknok} | {aux}".format(map = m['name'], oknok = msg, aux = aux), msg)
         if(retCheck != None):
             ret.append(retCheck)
     return ret
@@ -139,7 +151,7 @@ def validaTransformations(arquivo):
                     msg = "ok"
                 else:
                     msg = "nok"
-                retCheck = Func.geraMensagem("Nome do Transformation {type} {map} está {oknok}".format(map = m['name'], oknok = msg, type = t['tipo']), msg)
+                retCheck = Func.geraMensagem("Nome do Transformation {type} {map} está {oknok} | {map} nao inicia com {nome}".format(map = m['name'], oknok = msg, type = t['tipo'], nome = t['nome']), msg)
                 if(retCheck != None):
                     ret.append(retCheck)
     return ret
@@ -175,7 +187,7 @@ def validaTaskEmail(arquivo):
                 if(m['name'].startswith("eml_")):
                     for eAttr in x:
                         if(not eAttr["value"].startswith("$$")):
-                            retCheck=Func.geraMensagem("No email {eml} - conferir o atributo {vrl} nok".format(eml = m['name'], vrl = eAttr["name"]), "nok")
+                            retCheck=Func.geraMensagem("No email {eml} - conferir o atributo {vrl} nok, nao inicia com $$".format(eml = m['name'], vrl = eAttr["name"]), "nok")
                             if(retCheck != None):
                                 ret.append(retCheck)
                 else:
@@ -187,3 +199,6 @@ def validaTaskEmail(arquivo):
                 if(retCheck != None):
                     ret.append(retCheck)
     return ret
+
+def listaItensManual():
+    return Func.Conf.ListaTag("topicos_validados")
