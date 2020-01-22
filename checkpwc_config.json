@@ -19,7 +19,7 @@
                     "$DBConnectionBI", 
                     "$DBConnectionBI_READ"],
     "operacoes_mapa":["EXT", "TRF", "DIM", "FAT", "CRG", "UPD", "INS", "DEL"],
-    "operacoes_workflow":["EXT", "TRF", "DIM", "FAT", "GDC", "TOT"],
+    "operacoes_workflow":["EXT", "TRF", "DIM", "FAT", "GDC", "TOT", "CRG", "UPD", "INS", "DEL"],
     "sistemas_origem":["FAMA", "OLMP", "FIES", "CLBR", "UNPR", "PRTK"],
     "nome_arquivo_param":["PARAMETER_EXTRAC.prm", "PARAMETER_LOADER.prm", "PARAMETER_TRANSF.prm"],
     "transformations":[
