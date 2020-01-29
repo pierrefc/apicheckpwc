@@ -6,8 +6,16 @@ import getConfig as Conf
 #4034 rtm
 
 def ExecutaCheck(arquivo):
-    soup = BeautifulSoup(arquivo, "lxml")
-    return WF.valida(soup)        
+    soup = BeautifulSoup(arquivo.data, "lxml")
+    full = arquivo.headers.get('full')
+    if (full == None):
+        full = 0
+    print("-----------------------")
+    print(full)
+    print(arquivo.headers.get('full'))
+    print("-----------------------")
+
+    return WF.valida(soup, full)
 
 def main():
     arquivo = Conf.ListaTag("arquivos")

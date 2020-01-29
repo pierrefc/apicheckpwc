@@ -4,6 +4,7 @@ from flask_restful import Resource, Api
 from flask_cors import CORS
 import json
 import main
+import checkDevOps
 
 app = Flask(__name__)
 api = Api(app)
@@ -18,13 +19,24 @@ class validarArquivo(Resource):
         #print(request.json)
         print("@@@@@@@@@@@@@@@@@@@@@@@@")
         #print(dir(request.data))
-        retorno = main.ExecutaCheck(request.data)
+        retorno = main.ExecutaCheck(request)
         print(retorno)
         print("@@@@@@@@@@@@@@@@@@@@@@@@")
+
         #print(request.data)
         return retorno
 
+class validarArquivoPWC(Resource):
+    def post(self):
+        print("{[[[[[[[[[[[]]]]]]]]]]]}")
+        retorno = main.ExecutaCheck(request)
+        bol = checkDevOps.ValidaDevOps(retorno)
+        print(bol)
+        print("{[[[[[[[[[[[]]]]]]]]]]]}")
+        return bol
+
 api.add_resource(validarArquivo, '/validar')
+api.add_resource(validarArquivoPWC, '/validar-pwc')
 
 
 if __name__ == '__main__':

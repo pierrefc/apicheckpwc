@@ -1,12 +1,14 @@
 import getConfig as Conf
 
-def geraMensagem(msg, oknok):
+
+
+def geraMensagem(msg, oknok, full):
     msg = msg.replace("á", "a")
     
     if(oknok == "nok"):
         print(msg)
     else:
-        if(oknok == "ok" and Conf.ListaTag("exibe_msg_ok") != "0"):
+        if(oknok == "ok" and full != "0"):
             print(msg)
         else:
             msg = None
