@@ -147,6 +147,7 @@ def validaTransformations(arquivo, full):
     for t in transf:
         msg = ""
         for m in arquivo:
+            aux = ""
             if(m['type'] == t['tipo']):
                 if(m['name'].startswith(t['nome'])):
                     msg = "ok"
