@@ -95,12 +95,17 @@ def validaNomeMapa(arquivo, full):
         aux = ""
         if(m['name'].startswith('m_') or m['name'].startswith('QW_')):
             if any(nm[1] in s for s in Conf.ListaTag("operacoes_mapa")):
-                if(nm[1] == "EXT"):
-                    if any(nm[2] in s for s in Conf.ListaTag("sistemas_origem")):
-                        msg = "ok"
-                    else:
-                        msg = "nok"
-                        aux = " | EXT sem o nome do sistema de origem valido"
+                if("srtc" not in m['name']):
+                    msg = "ok"
+                    if(nm[1] == "EXT"):
+                        if any(nm[2] in s for s in Conf.ListaTag("sistemas_origem")):
+                                msg = "ok"
+                        else:
+                            msg = "nok"
+                            aux = " | EXT sem o nome do sistema de origem valido"
+                else:
+                    msg = "nok"
+                    aux = " | não pode ter srtc no nome"
             else:
                 msg = "nok"
                 aux = " | não corresponde a lista de operacoes validas"
