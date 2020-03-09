@@ -10,24 +10,26 @@ retPublico = []
 def valida(arquivo, full):
     retJson = {}
 
-    retJson.update({"Conexao":validaNomeConexao(arquivo.findAll('connectionreference'), full)}) 
-    retJson.update({"Atributos":validaAtributos(arquivo.findAll('attribute'), full)})
-    retJson.update({"Instancia":validaTaskInstance(arquivo.findAll('taskinstance'), full)})
-    retJson.update({"Nome mapa":validaNomeMapa(arquivo.findAll('mapping'), full)})
-    retJson.update({"Nome workflow":validaNomeWorkflow(arquivo.findAll('workflow'), full)})
-    retJson.update({"Transformacoes":validaTransformations(arquivo.findAll('transformation'), full)})
-    retJson.update({"Emails":validaTaskEmail(arquivo.findAll('task'), full)})
-    retJson.update({"Objetos Workflow":validaObjWorkflows(arquivo.findAll('workflow'), full)})
-    retJson.update({"Itens validados":listaItensManual()})
+    retJson.update({"Conexao":valida_nome_conexao(arquivo.findAll('connectionreference'), full)}) 
+    retJson.update({"Atributos":valida_atributos(arquivo.findAll('attribute'), full)})
+    retJson.update({"Instancia":valida_task_instance(arquivo.findAll('taskinstance'), full)})
+    retJson.update({"Nome mapa":valida_nome_mapa(arquivo.findAll('mapping'), full)})
+    retJson.update({"Nome workflow":valida_nome_wotkflow(arquivo.findAll('workflow'), full)})
+    retJson.update({"Transformacoes":valida_transformations(arquivo.findAll('transformation'), full)})
+    retJson.update({"Emails":valida_task_email(arquivo.findAll('task'), full)})
+    retJson.update({"Objetos Workflow":valida_objeto_workflow(arquivo.findAll('workflow'), full)})
+    retJson.update({"Instancia de banco":valida_instancia_banco(arquivo.findAll('instance'), full)})
+    retJson.update({"Itens validados":lista_itens_manual()})
     
     return retJson
    
 
-def validaNomeConexao(arquivo, full):
+def valida_nome_conexao(arquivo, full):
     ret=[]
     retCheck = None
     conns = Conf.ListaTag("connections")
     for m in arquivo:
+        print("valida_nome_conexao {v}".format(v=m['variable']))
         if any(m['variable'] in s for s in conns):
             msg = "ok"
         else:
@@ -38,7 +40,7 @@ def validaNomeConexao(arquivo, full):
     return ret
 
 #7.4.1. Aumento do intervalo de commit         
-def validaAtributos(arquivo, full):
+def valida_atributos(arquivo, full):
     ret=[]
     retCheck = None
     for m in arquivo:
@@ -65,7 +67,7 @@ def validaAtributos(arquivo, full):
     return ret
 
 #7.4.4. Processos e re-execuções 
-def validaTaskInstance(arquivo, full):
+def valida_task_instance(arquivo, full):
     ret=[]
     retCheck = None
     for m in arquivo:
@@ -86,7 +88,7 @@ def validaTaskInstance(arquivo, full):
     return ret
 
 #4.1.4.2 Nomenclatura de Mapas
-def validaNomeMapa(arquivo, full):
+def valida_nome_mapa(arquivo, full):
     ret=[]
     retCheck = None
     for m in arquivo:
@@ -118,7 +120,7 @@ def validaNomeMapa(arquivo, full):
     return ret
 
 #4.1.4.4. Nomenclatura de Workflows 
-def validaNomeWorkflow(arquivo, full):
+def valida_nome_wotkflow(arquivo, full):
     ret=[]
     retCheck = None
     for m in arquivo:
@@ -144,7 +146,7 @@ def validaNomeWorkflow(arquivo, full):
     return ret
 
 #4.1.4.6 Transformations
-def validaTransformations(arquivo, full):
+def valida_transformations(arquivo, full):
     ret=[]
     retCheck = None
     transf = Conf.ListaTag("transformations")
@@ -165,7 +167,7 @@ def validaTransformations(arquivo, full):
     return ret
 
 #4.1.4.7. Objetos dos Workflows
-def validaObjWorkflows(arquivo, full):
+def valida_objeto_workflow(arquivo, full):
     ret=[]
     retCheck = None
     objwf = Conf.ListaTag("objetos_workflow")
@@ -185,7 +187,7 @@ def validaObjWorkflows(arquivo, full):
     return ret
 
 #4.1.6. Uso de E-mails
-def validaTaskEmail(arquivo, full):
+def valida_task_email(arquivo, full):
     ret=[]
     retCheck = None
     for m in arquivo:
@@ -208,5 +210,21 @@ def validaTaskEmail(arquivo, full):
                     ret.append(retCheck)
     return ret
 
-def listaItensManual():
+def lista_itens_manual():
     return Func.Conf.ListaTag("topicos_validados")
+
+def valida_instancia_banco(arquivo, full):
+    ret=[]
+    conns = Conf.ListaTag("instancias_banco")
+    for m in arquivo:
+        print(m)
+        if(m.get('dbdname') == True):
+            #print("dbdname in ok")
+            if any(m['dbdname'] in s for s in conns):
+                msg = "ok"
+            else:
+                msg = "nok"
+            retCheck = Func.geraMensagem("Instancia de banco {oknok} - DBNAME {value}".format(value = m['dbdname'], oknok = msg), msg, full)
+            if(retCheck != None):
+                ret.append(retCheck)
+    return ret

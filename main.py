@@ -6,6 +6,7 @@ import getConfig as Conf
 #4034 rtm
 
 def ExecutaCheck(arquivo):
+    print("ExecutaCheck - || {d}".format(d=arquivo.data))
     soup = BeautifulSoup(arquivo.data, "lxml")
     full = arquivo.headers.get('full')
     if (full == None):

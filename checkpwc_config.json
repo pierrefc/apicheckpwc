@@ -42,6 +42,7 @@
         {"tipo": "Event Raise", "nome": "evr_"},
         {"tipo": "Timer", "nome": "tmr_"}
     ],
+    "instancias_banco":["BI", "ODS", "STAGE_SAS", "STAGE", "DW_USER", "SIGA_DESENV", "DW_SAS"],
     "topicos_validados":["7.4.1. Aumento do intervalo de commit",
                         "7.4.4. Processos e re-execucoes",
                         "4.1.4.2 Nomenclatura de Mapas",
